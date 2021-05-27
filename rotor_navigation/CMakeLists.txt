@@ -13,8 +13,10 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_msgs
   geometry_msgs 
   mav_msgs 
+  nav_msgs
   roscpp 
   sensor_msgs
+  waypoint_navigator
 )
 
 ## System dependencies are found with CMake's conventions
@@ -109,7 +111,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES rotor_navigation
- CATKIN_DEPENDS roscpp rospy gazebo_msgs geometry_msgs mav_msgs sensor_msgs
+ CATKIN_DEPENDS roscpp rospy gazebo_msgs geometry_msgs mav_msgs nav_msgs sensor_msgs waypoint_navigator
 #  DEPENDS system_lib
 )
 
@@ -120,24 +122,25 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/rotor_navigation.cpp
-# )
+add_library(${PROJECT_NAME}
+  src/${PROJECT_NAME}.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/rotor_navigation_node.cpp)
+add_executable(map_publisher src/map_publisher.cpp)
+add_executable(schedule_delivery src/schedule_delivery.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -147,16 +150,23 @@ include_directories(
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(map_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(schedule_delivery ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(map_publisher
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
 
-add_executable(waypoint_publisher src/waypoint_publisher.cpp)
-target_link_libraries(waypoint_publisher ${catkin_LIBRARIES})
-add_dependencies(waypoint_publisher ${catkin_EXPORTED_TARGETS})
+target_link_libraries(schedule_delivery
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
+
+add_executable(path_finder src/path_finder.cpp)
+target_link_libraries(path_finder ${PROJECT_NAME} ${catkin_LIBRARIES})
+add_dependencies(path_finder ${catkin_EXPORTED_TARGETS})
 
 #############
 ## Install ##
@@ -178,7 +188,7 @@ add_dependencies(waypoint_publisher ${catkin_EXPORTED_TARGETS})
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-install(TARGETS waypoint_publisher
+install(TARGETS path_finder
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

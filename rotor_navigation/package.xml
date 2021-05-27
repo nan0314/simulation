@@ -60,8 +60,10 @@
   <depend>geometry_msgs</depend>
   <depend>joy</depend>
   <depend>mav_msgs</depend>
+  <depend>nav_msgs</depend>
   <depend>rotors_gazebo_plugins</depend>
   <depend>sensor_msgs</depend>
+  <depend>waypoint_navigator</depend>
   <depend>xacro</depend>
 
 

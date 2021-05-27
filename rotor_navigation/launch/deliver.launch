@@ -1,0 +1,10 @@
+<launch>
+
+    <include file="$(find waypoint_navigator)/launch/mav_sim.launch"/>
+    <include file="$(find waypoint_navigator)/launch/waypoint_navigator.launch"/>
+
+    <node name="map_publisher" pkg="rotor_navigation" type="map_publisher" output="screen"/>
+    <!-- <node name="schedule_delivery" pkg="rotor_navigation" type="schedule_delivery" output="screen"/> -->
+    <node name="path_finder" pkg="rotor_navigation" type="path_finder" output="screen"/>
+    
+</launch>
