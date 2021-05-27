@@ -16,7 +16,7 @@ std::vector<std::vector<int>> getTargets(){
     bool done = false;
     while(!done){
         cout << "\nPick a location:\n" << std::endl;
-        cout << "1. House 1 (-37,-18)\n" << "2. House 2 (-33,29)\n" << "3. House 3 (-5,-28)\n"
+        cout << "1. House 1 (-37,-18)\n" << "2. House 2 (-34,29)\n" << "3. House 3 (-5,-28)\n"
             << "4. House 4 (93,11)\n" << "5. House 5 (56,26)\n" << "6. Office 1 (9,6)"
             << "7. Restaurant 1 (24,-8)\n" << "8. Apartment 1 (87,10)\n" << "9. Done" << std::endl;
 
@@ -32,7 +32,7 @@ std::vector<std::vector<int>> getTargets(){
                 targets.push_back({-37,-18});
                 break;
             case 2: // code to be executed if n = 2;
-                targets.push_back({-33,29});
+                targets.push_back({-34,29});
                 break;
             case 3:
                 targets.push_back({-5,-28});
