@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs 
   mav_msgs 
   nav_msgs
-  roscpp 
+  tf 
   sensor_msgs
   waypoint_navigator
 )
@@ -111,7 +111,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES rotor_navigation
- CATKIN_DEPENDS roscpp rospy gazebo_msgs geometry_msgs mav_msgs nav_msgs sensor_msgs waypoint_navigator
+ CATKIN_DEPENDS roscpp rospy gazebo_msgs geometry_msgs mav_msgs nav_msgs tf sensor_msgs waypoint_navigator
 #  DEPENDS system_lib
 )
 

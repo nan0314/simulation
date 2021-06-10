@@ -2,6 +2,7 @@
 #include <cmath>
 #include <nav_msgs/OccupancyGrid.h>
 #include "rotor_navigation/rotor_navigation.hpp"
+#include <tf/transform_broadcaster.h>
 
 
 int main(int argc, char** argv) {
@@ -15,10 +16,19 @@ int main(int argc, char** argv) {
         "/risk_map", 10,true);
 
     // Intialize the map parameters
-    int height = 200;
+    int height = 210;
     int width = 100;
     int ox = 127;
     int oy = 50;
+
+    // Publish transform
+    static tf::TransformBroadcaster br;
+    tf::Transform transform;
+    transform.setOrigin( tf::Vector3(0, 0, 0.0) );
+    tf::Quaternion q;
+    q.setRPY(0, M_PI, 90. / 180. * M_PI);
+    transform.setRotation(q);
+    
 
     // Create Map object
     Map map(height, width, ox, oy);
@@ -55,9 +65,14 @@ int main(int argc, char** argv) {
     // Convert Map object into nav_msgs::OccupancyGrid message
     nav_msgs::OccupancyGrid risk_map = map.getGrid();
 
+    ros::Rate r(10);
+    
     while (ros::ok()){
         map_pub.publish(risk_map);
+        br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "map"));
         ros::spinOnce();
+        r.sleep();
+
     }
     
     ros::shutdown();

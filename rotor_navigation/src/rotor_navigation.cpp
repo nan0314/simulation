@@ -91,7 +91,7 @@ namespace rotor_navigation{
         height{height}, width{width}, ox{ox}, oy{oy}, data{data} {}
 
     Map::Map(nav_msgs::OccupancyGrid map) : height{int(map.info.height)}, width{int(map.info.width)}, 
-        ox{int(map.info.origin.position.x)}, oy{int(map.info.origin.position.y)}, data{map.data} {}
+        ox{int(-map.info.origin.position.y)}, oy{int(-map.info.origin.position.x)}, data{map.data} {}
 
     int Map::get_ox(){
         return ox;
@@ -157,8 +157,8 @@ namespace rotor_navigation{
         map_data.resolution = 1;
         map_data.height = height;
         map_data.width = width;
-        map_data.origin.position.x = ox;
-        map_data.origin.position.y = oy;
+        map_data.origin.position.x = -oy;
+        map_data.origin.position.y = -ox;
 
         map.data = data;
         map.info = map_data;

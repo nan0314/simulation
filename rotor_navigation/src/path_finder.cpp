@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
     ros::ServiceClient waypoints_client = nh.serviceClient<waypoint_navigator::GoToWaypoints>("/firefly/go_to_waypoints");
 
     int altitude = 20;
-    std::vector<int> start = {-70,-20};
+    std::vector<int> start = {-75,-20};
     std::vector<int> end = {-50,-20};
 
     vector<vector<int>> path;

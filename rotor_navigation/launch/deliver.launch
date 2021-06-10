@@ -1,10 +1,35 @@
 <launch>
 
-    <include file="$(find waypoint_navigator)/launch/mav_sim.launch"/>
-    <include file="$(find waypoint_navigator)/launch/waypoint_navigator.launch"/>
+  <arg name="world_name" default="small_city"/>
+  <arg name="x" default="-75"/>
+  <arg name="y" default="-20"/>
 
-    <node name="map_publisher" pkg="rotor_navigation" type="map_publisher" output="screen"/>
-    <!-- <node name="schedule_delivery" pkg="rotor_navigation" type="schedule_delivery" output="screen"/> -->
-    <node name="path_finder" pkg="rotor_navigation" type="path_finder" output="screen"/>
+  <include file="$(find waypoint_navigator)/launch/mav_sim.launch">
+      <arg name="world_name" value="$(arg world_name)" />
+      <arg name="x" value="$(arg x)"/>
+      <arg name="y" value="$(arg y)"/>
+  </include>
+
+  <include file="$(find waypoint_navigator)/launch/waypoint_navigator.launch"/>
+
+  <node name="map_publisher" pkg="rotor_navigation" type="map_publisher" output="screen"/>
+  <!-- <node name="schedule_delivery" pkg="rotor_navigation" type="schedule_delivery" output="screen"/> -->
+  <node name="path_finder" pkg="rotor_navigation" type="path_finder" output="screen"/>
     
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <remap from="robot_description" to="/firefly/robot_description"/>
+  </node>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <remap from="robot_description" to="/firefly/robot_description"/>
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rotor_navigation)/rviz/config.rviz">
+    <remap from="robot_description" to="/firefly/robot_description"/>
+  </node>
+
+  <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/firefly/vi_sensor/left/image_raw" />
+  </node>
+  
 </launch>
